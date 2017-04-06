@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" ng-app="careerHub">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/lib/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="~/css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/angular/angular.js"></script>
+        <script src="~/lib/angular-resource/angular-resource.js"></script>
+        <script src="~/lib/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="~/scripts/app.js"></script>
+        <script src="~/scripts/controllers.js"></script>
+        <script src="~/scripts/services.js"></script>
+    </environment>
+</body>
+</html>
