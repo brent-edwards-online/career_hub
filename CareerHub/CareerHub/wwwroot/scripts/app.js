@@ -1,10 +1,9 @@
 ﻿'use strict';
 
-angular.module('careerHub', ['ui.router', 'ngResource'])
-    .config(function ($stateProvider, $urlRouterProvider) {
-        $stateProvider
+var app = angular.module('careerHub', ['ui.router', 'ngResource', 'LocalStorageModule']);
 
-            // route for the home page
+app.config(function ($stateProvider, $urlRouterProvider) {
+        $stateProvider
             .state('app', {
                 url: '/',
                 views: {
@@ -21,8 +20,34 @@ angular.module('careerHub', ['ui.router', 'ngResource'])
                 }
 
             })
-
-            // route for the dishdetail page
+            .state('app.image', {
+                url: 'image/',
+                resolve: {
+                    hasAccess: function (loginService) {
+                        return loginService.isLoggedIn();
+                    }
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'views/image.html',
+                        controller: 'ImageController'
+                    }
+                }
+            })
+            .state('app.review', {
+                url: 'review/',
+                resolve: {
+                    hasAccess: function (loginService) {
+                        return loginService.isLoggedIn();
+                    }
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'views/review.html',
+                        controller: 'ReviewController'
+                    }
+                }
+            })
             .state('app.about', {
                 url: 'about/',
                 views: {
@@ -34,5 +59,6 @@ angular.module('careerHub', ['ui.router', 'ngResource'])
             });
 
         $urlRouterProvider.otherwise('/');
-    })
-    ;
+});
+
+

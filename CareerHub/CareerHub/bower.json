@@ -9,7 +9,9 @@
     "angular": "1.5.7",
     "angular-route": "1.5.7",
     "angular-ui-router": "1.0.0-rc.1",
-    "angular-resource": "v1.6.5-build.5353+sha.136a42a"
+    "angular-resource": "v1.6.5-build.5353+sha.136a42a",
+    "angular-local-storage": "v0.5.2",
+    "ngToast": "ngtoast#v1.0.0"
   },
   "resolutions": {
     "angular": "1.6.5-build.5353+sha.136a42a"

@@ -1,0 +1,25 @@
+﻿<div class="page_content">
+    <div class="container" style="padding-top:50px">
+        <div class="row">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h1>Rate an image</h1>
+                </div>
+                <div class="panel-body">
+                    <div>
+                        <img class="img-responsive center-block" ng-if="showImage" src="{{ imageUrl }}" />
+                    </div>
+                    <div class="footer-buttons">
+                        <button type="submit" class="btn btn-success image-btn col-xs-12 col-md-4" ng-click="like()">Like</button>
+                        <button type="submit" class="btn btn-info image-btn view-btn col-xs-12 col-md-4" ng-click="getImage()">View an image?</button>
+                        <button type="submit" class="btn btn-danger image-btn col-xs-12 col-md-4" ng-click="dislike()">Dislike</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

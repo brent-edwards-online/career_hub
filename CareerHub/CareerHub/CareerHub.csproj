@@ -8,6 +8,12 @@
     <Content Include="wwwroot\css\styles.css" />
     <Content Include="wwwroot\scripts\app.js" />
     <Content Include="wwwroot\scripts\services.js" />
+    <Content Include="wwwroot\views\review.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="wwwroot\views\image.html">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="wwwroot\views\header.html" />
   </ItemGroup>
 
@@ -15,8 +21,6 @@
     <Folder Include="Angular\css\" />
     <Folder Include="Angular\views\" />
     <Folder Include="bower_components\" />
-    <Folder Include="Service\" />
-    <Folder Include="Repository\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
   

@@ -1,11 +1,63 @@
 ﻿h1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 40px;
-    font-weight: 800;
-    color: blue;
-
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 20px;
+    font-weight: 400;
 }
 
+#navbar {
+    padding-top: 22px;
+}
+
+#navbar img {
+    z-index: 10;
+}
+
+/*
+ul.nav.navbar-nav {
+    background: #fff;
+}
+*/
+
 .navbar-default {
-    min-height: 80px;
+    min-height: 100px;
+    max-height: 100px;
+}
+
+.page_content {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+ul.nav {
+    margin: 0;
+    padding: 0;
+}
+
+.image_container {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.image_container img {
+    position: absolute;
+    top: 50%;
+    display: block;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    min-width: 100%;
+}
+
+.image-btn {
+    display: block;
+}
+
+.view-btn {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.footer-buttons {
+    margin-top: 20px;
 }

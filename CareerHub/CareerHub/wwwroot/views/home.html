@@ -1,4 +1,64 @@
-﻿<div class="container">
-    <h1>Home</h1>
+﻿<div class="page_content" ng-controller="IndexController">
+    <div ng-if="isLoggedIn()">
+        <div class="container" style="padding-top:50px">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-md-offset-3">
+                    <div class="panel panel-default">
 
-</div>
+                        <div class="panel-heading">Logout</div>
+                        <div class="panel-body text-center">
+                            <h1>Thanks for visiting</h1>
+                        </div>
+                        <div class="panel-footer text-center">
+                            <button type="button" class="btn btn-info" ng-click="logout()">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div ng-if="!isLoggedIn()">
+            <div class="container" style="padding-top:50px">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-md-offset-3">
+                        <form class="form-horizontal" name="loginForm" ng-submit="actionLogin()" novalidate>
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading">Login</div>
+                                <div class="panel-body">
+
+                                    <div class="form-group" ng-class="{ 'has-error' : loginForm.loginemail.$error.required && !loginForm.loginemail.$pristine }">
+                                        <label for="loginemail" class="col-sm-2 control-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="loginemail" name="loginemail" placeholder="Enter Email" ng-model="loginEmail" required>
+                                            <span ng-show="loginForm.loginemail.$error.required && !loginForm.loginemail.$pristine" class="help-block">Your email is required.</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : loginForm.loginpassword.$error.required && !loginForm.loginpassword.$pristine }">
+                                        <label for="loginpassword" class="col-sm-2 control-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter Password" ng-model="loginPassword" required>
+                                            <span ng-show="loginForm.loginpassword.$error.required && !loginForm.loginpassword.$pristine" class="help-block">Password is required.</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div ng-if="serverError" class="alert alert-danger" style="margin-top:5px;">
+                                    <div>{{serverError}}</div>
+                                </div>
+
+                                <div class="panel-footer">
+                                    <button type="submit" class="btn btn-success" ng-click="continueAsGuest()">Continue as Guest</button>
+                                    <button type="submit" class="btn btn-info pull-right" ng-click="login()">Login</button>
+                                    <button type="submit" class="btn btn-info pull-right" ng-click="register()" style="margin-right:10px">Register</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -22,7 +22,7 @@ namespace CareerHub.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "My API")
+                new ApiResource("api", "CareerHub Api")
             };
         }
 
@@ -34,7 +34,7 @@ namespace CareerHub.IdentityServer
             {
                 new Client
                 {
-                    ClientId = "resourceOwner",
+                    ClientId = "careerHubApi",
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
@@ -46,7 +46,7 @@ namespace CareerHub.IdentityServer
                         IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
                         IdentityServerConstants.StandardScopes.Profile,
                         "roles",
-                        "api1"
+                        "api"
                     }
 
                 }
