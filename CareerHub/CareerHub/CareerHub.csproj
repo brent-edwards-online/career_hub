@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\styles.css" />
+    <Content Include="wwwroot\healthcheck.html" />
     <Content Include="wwwroot\scripts\app.js" />
     <Content Include="wwwroot\scripts\services.js" />
     <Content Include="wwwroot\views\review.html">

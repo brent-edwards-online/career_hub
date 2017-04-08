@@ -1,15 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CareerHub.Service
+﻿namespace CareerHub.Service
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using Entities;
+    using Repository;
+
     public class ImageService : IImageService
     {
-        public string GetMessage()
+        private IUserImageRepository _userImageRepository;
+        private IUnitOfWork _unitOfWork;
+
+        public ImageService(IUserImageRepository userImageRepository, IUnitOfWork unitOfWork)
         {
-            return "Helloe from service";
+            this._userImageRepository = userImageRepository;
+            this._unitOfWork = unitOfWork;
+        }
+
+        public IEnumerable<UserImage> GetImagesByUser(string userid)
+        {
+            return this._userImageRepository.GetAll().Where(i => i.UserId == userid);
+        }
+
+        public bool InsertImage(string userid, string urls, string imageuser, bool isLiked)
+        {
+            try
+            {
+                UserImage userImage = new UserImage() { UserId = userid, ImageUrls = urls, ImageUser = imageuser, IsLiked = isLiked };
+                this._userImageRepository.Insert(userImage);
+                this._unitOfWork.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

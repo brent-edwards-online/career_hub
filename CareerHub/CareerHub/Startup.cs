@@ -11,6 +11,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using Repository;
 
     public class Startup
     {
@@ -29,6 +30,15 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    b => b.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             // Identity Server DbContext
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AWSConnection")));
@@ -44,6 +54,8 @@
             services.AddMvc();
 
             services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<IUserImageRepository, UserImageRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddIdentityServer()
                 .AddTemporarySigningCredential()
@@ -58,7 +70,10 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug(LogLevel.Trace);
+
+            app.UseCors("CorsPolicy");
 
             if (env.IsDevelopment())
             {
@@ -67,7 +82,7 @@
 
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
-                Authority = "http://localhost:5000/",
+                Authority = "http://careerhub.brentedwardsonline.com:80/",
                 AllowedScopes = { "api" },
                 RequireHttpsMetadata = false
             });

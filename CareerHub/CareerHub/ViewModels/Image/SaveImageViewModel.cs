@@ -1,17 +1,13 @@
-﻿namespace CareerHub.Entities
+﻿namespace CareerHub.ViewModels.Image
 {
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("UserImage")]
-    public class UserImage
+    public class SaveImageViewModel
     {
         [Required]
-        [Key]
-        public int UserImageId { get; set; }
+        public bool IsLiked { get; set; }
 
         [Required]
-        [MaxLength]
         public string UserId { get; set; }
 
         [Required]
@@ -21,8 +17,5 @@
         [Required]
         [MaxLength(1500)]
         public string ImageUser { get; set; }
-
-        [Required]
-        public bool IsLiked { get; set; }
     }
 }

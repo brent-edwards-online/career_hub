@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CareerHub.Service
+﻿namespace CareerHub.Service
 {
+    using Entities;
+    using System.Collections.Generic;
+
     public interface IImageService
     {
-        string GetMessage();
+        IEnumerable<UserImage> GetImagesByUser(string userid);
+        bool InsertImage(string userid, string urls, string imageuser, bool isLiked);
     }
 }

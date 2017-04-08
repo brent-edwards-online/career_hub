@@ -2,7 +2,7 @@
 {
     using Entities;
 
-    interface IUserImageRepository : IGenericRepository<UserImage>
+    public interface IUserImageRepository : IGenericRepository<UserImage>
     {
     }
 }

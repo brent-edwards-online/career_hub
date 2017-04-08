@@ -12,14 +12,20 @@
                         <img class="img-responsive center-block" ng-if="showImage" src="{{ imageUrl }}" />
                     </div>
                     <div class="footer-buttons">
-                        <button type="submit" class="btn btn-success image-btn col-xs-12 col-md-4" ng-click="like()">Like</button>
-                        <button type="submit" class="btn btn-info image-btn view-btn col-xs-12 col-md-4" ng-click="getImage()">View an image?</button>
-                        <button type="submit" class="btn btn-danger image-btn col-xs-12 col-md-4" ng-click="dislike()">Dislike</button>
+                        <button type="button" class="btn btn-success image-btn col-xs-12 col-md-4" ng-click="saveImageRating(true)">Like</button>
+                        <button type="button" class="btn btn-info image-btn view-btn col-xs-12 col-md-4" ng-click="getRandomImage()">View an image?</button>
+                        <button type="button" class="btn btn-danger image-btn col-xs-12 col-md-4" ng-click="saveImageRating(false)">Dislike</button>
+
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-thumbs-down"></span> Dislike
+                        </button>
+
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>

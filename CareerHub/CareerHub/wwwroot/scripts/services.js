@@ -1,25 +1,37 @@
 ﻿'use strict';
 
 angular.module('careerHub')
-    .constant("baseurl", "http://localhost:5000/")
+    .constant('baseurl', 'https://careerhub.brentedwardsonline.com/')
+    .constant('baseimageurl', 'https://api.unsplash.com/')
     .service('loginService', ['$http', '$resource', 'baseurl', 'localStorageService', function ($http, $resource, baseurl, localStorageService) {
         this.login = function (email, password) {
             var tokenURL = baseurl + 'connect/token';
             var payload = 'client_id=careerHubApi';
                 payload += '&client_secret=secret',
-                payload += '&scope=api';
+                payload += '&scope=api openid';
                 payload += '&grant_type=password';
                 payload += '&username=' + encodeURIComponent(email);
                 payload += '&password=' + encodeURIComponent(password);
-
-                //return $http.post(tokenURL, payload);
 
             return $http({
                 method: 'POST',
                 url: tokenURL,
                 data: payload,
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+        };
+
+        this.getUserData = function () {
+            var userInfoURL = baseurl + 'connect/userinfo';
+            var tokenData = localStorageService.get('token-data');
+
+            return $http({
+                method: 'GET',
+                url: userInfoURL,
+                headers: {
+                    'Authorization': 'Bearer ' + tokenData.access_token
                 }
             })
         };
@@ -29,8 +41,8 @@ angular.module('careerHub')
         };
 
         this.isLoggedIn = function() {
-            var userData = localStorageService.get('user-data');
-            if (userData && userData.access_token) {
+            var tokenData = localStorageService.get('token-data');
+            if (tokenData && tokenData.access_token) {
                 return true;
             }
             else {
@@ -38,18 +50,52 @@ angular.module('careerHub')
             }
         }
     }])
-    .service('imageService', ['$http', '$resource', 'baseurl', function ($http, $resource, baseurl) {
+    .service('imageService', ['$http', '$resource', 'baseimageurl', 'baseurl', 'localStorageService', function ($http, $resource, baseimageurl, baseurl, localStorageService) {
 
         this.getRandomImage = function () {
-            return $http.get('data/dishes.json');
+            var endPoint = baseimageurl + 'photos/random';
+            return $http({
+                method: 'GET',
+                url: endPoint,
+                headers: {
+                    'Authorization': 'Client-ID dcea3f23302f66a1228e09e49735e483cbec7bcc86039cc1988b481c0fef36bb'
+                }
+            })
         };
 
-        this.saveImage = function () {
-            //return $resource(baseurl+"dishes/:id",null,{'update':{method:'PUT'}});
-            return $resource('data/dishes.json', null, { 'update': { method: 'PUT' } });
+        this.saveImage = function (like, imageData) {
+            var tokenData = localStorageService.get('token-data');
+            var userData = localStorageService.get('user-data');
+
+            var tokenURL = baseurl + 'api/image';
+            var payload = 'isLiked=' + like;
+            payload += '&userId=' + encodeURIComponent(userData.sub);
+            payload += '&imageUrls=' + encodeURIComponent(JSON.stringify(imageData.urls));
+            payload += '&imageUser=' + encodeURIComponent(JSON.stringify(imageData.user));
+            
+            return $http({
+                method: 'POST',
+                url: tokenURL,
+                data: payload,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + tokenData.access_token
+                }
+            })
         };
 
         this.getAllImages = function () {
-            return $http.get('data/promotions.json');
+            var tokenData = localStorageService.get('token-data');
+            var userData = localStorageService.get('user-data');
+
+            var imageURL = baseurl + 'api/image?userid=' + encodeURIComponent(userData.sub);
+
+            return $http({
+                method: 'GET',
+                url: imageURL,
+                headers: {
+                    'Authorization': 'Bearer ' + tokenData.access_token
+                }
+            })
         };
     }]);

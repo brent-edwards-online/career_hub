@@ -1,3 +1,21 @@
 ﻿<div class="page_content">
-    <h1>{{ reviewMessage }}</h1>
+    <div class="container">
+        <ul class="media-list">
+            <li class="media" ng-repeat="image in imageList">
+                <div class="media-left media-middle">
+                    <img class="media-object img-thumbnail" src="{{image.imageUrls.thumb}}" alt="Image">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        {{image.isLiked}}
+                    </h4>
+                    <p>Photo By: {{image.imageUser.name}}</p>
+                    <p>Bio: {{image.imageUser.bio}}</p>
+                    <div class="media-left media-middle">
+                        <img class="media-object img-thumbnail" src="{{image.imageUser.profile_image.medium}}" alt="Image">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>

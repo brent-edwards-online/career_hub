@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var app = angular.module('careerHub', ['ui.router', 'ngResource', 'LocalStorageModule']);
+var app = angular.module('careerHub', ['ui.router', 'ngResource', 'LocalStorageModule', 'ngToast']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
