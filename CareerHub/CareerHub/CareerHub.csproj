@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Angular\css\" />
     <Folder Include="Angular\views\" />
-    <Folder Include="bower_components\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
   

@@ -131,13 +131,13 @@ angular.module('careerHub')
         $scope.showImage = false;
 
         if (!$scope.hasAccess) {
+            toaster.pop({ type: 'info', body: "You must login first to view images. You can register or just click 'Continue as Guest' from the Home screen" });
             $state.go('app');
         }
         else {
             $scope.currentImageData = initialImage.data;
             $scope.imageUrl = initialImage.data.urls.small;
             $scope.showImage = true;
-
         }
 
         $scope.getRandomImage = function () {
@@ -171,6 +171,7 @@ angular.module('careerHub')
         $scope.view = 0;
 
         if (!$scope.hasAccess) {
+            toaster.pop({ type: 'info', body: "You must login first to view images. You can register or just click 'Continue as Guest' from the Home screen" });
             $state.go('app');
         }
 
