@@ -1,6 +1,9 @@
 # Career Hub 
 Demo Angular1 and MVC Project For CareerHub
 
+# Demo site
+[Demo Site](https://careerhub.brentedwardsonline.com)
+
 # Usage
 This application allows the user to view random images and like or dislike them.
 
