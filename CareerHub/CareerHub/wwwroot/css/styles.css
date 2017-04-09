@@ -7,6 +7,10 @@ div.well {
     margin-top: 10px;
 }
 
+.alert {
+
+}
+
 .well, .panel-body, .panel-footer, nav.navbar-default, .navbar-default .navbar-nav > li > a, .panel-default > .panel-heading {
     background: #000;
     color: #85C2C2;

@@ -37,7 +37,21 @@ angular.module('careerHub')
         };
 
         this.register = function (email, password, firstname, lastname) {
-            alert('Register');
+            var registerURL = baseurl + 'account/register';
+            var payload = 'FirstName=' + encodeURIComponent(firstname);
+            payload += '&LastName=' + encodeURIComponent(lastname);
+            payload += '&Email=' + encodeURIComponent(email);
+            payload += '&Password=' + encodeURIComponent(password);
+            payload += '&ConfirmPassword=' + encodeURIComponent(password);
+
+            return $http({
+                method: 'POST',
+                url: registerURL,
+                data: payload,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
         };
 
         this.isLoggedIn = function() {

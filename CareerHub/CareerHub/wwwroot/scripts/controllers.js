@@ -2,52 +2,16 @@
 
 angular.module('careerHub')
     .controller('IndexController', ['$scope', 'loginService', 'localStorageService', '$state', 'toaster', function ($scope, loginService, localStorageService, $state, toaster) {
-        $scope.loginFunction = -1;
+        
         $scope.serverError = undefined;
         $scope.currentUser = "";
         $scope.registerEnabled = false;
 
-        $scope.actionLogin = function () {
-            $scope.serverError = undefined;
-
-            if ($scope.loginFunction == 2) {
-                if ($scope.registerEnabled) {
-                    loginService.register($scope.loginEmail, $scope.loginPassword);
-                }
-            }
-            else {
-                if ($scope.loginFunction == 1) {
-                    $scope.loginEmail = "guest@guest.com";
-                    $scope.loginPassword = "GU3$Tl@g1n";
-                }
-                loginService.login($scope.loginEmail, $scope.loginPassword)
-                    .then(function (response) {
-                        localStorageService.set('token-data', response.data);
-
-                        loginService.getUserData()
-                            .then(function (response) {
-                                localStorageService.set('user-data', response.data);
-                                $state.go('app.image');
-                            },
-                            function (response) {
-                                switch (response.status) {
-                                    case 404:
-                                        $scope.serverError = "Server Error 404:" + response.statusText;
-                                        break;
-                                    default:
-                                        $scope.serverError = response.data.error_description;
-                                }
-                                toaster.pop({ type: 'error', body: $scope.serverError });
-                            }
-                            );
-                    },
-                    function (response) {                        
-                        $scope.serverError = response.data.error_description;
-                        toaster.pop({ type: 'error', body: $scope.serverError });
-                    });
-            }
-        };
-
+        $scope.loginEmail = undefined;
+        $scope.loginPassword = undefined;
+        $scope.registerFirstname = undefined;
+        $scope.registerLastname = undefined;
+        
         $scope.isLoggedIn = function () {
             var tokenData = localStorageService.get('token-data');
             if (tokenData && tokenData.access_token) {
@@ -66,14 +30,99 @@ angular.module('careerHub')
         }
 
         $scope.login = function () {
-            $scope.loginFunction = 0;
+
+            if (!$scope.validate(false))
+            {
+                return;
+            }
+
+            loginService.login($scope.loginEmail, $scope.loginPassword)
+                .then(function (response) {
+                    localStorageService.set('token-data', response.data);
+
+                    loginService.getUserData()
+                        .then(function (response) {
+                            localStorageService.set('user-data', response.data);
+                            $state.go('app.image');
+                        },
+                        function (response) {
+                            switch (response.status) {
+                                case 404:
+                                    $scope.serverError = "Server Error 404:" + response.statusText;
+                                    break;
+                                default:
+                                    $scope.serverError = response.data.error_description;
+                            }
+                            toaster.pop({ type: 'error', body: $scope.serverError });
+                        }
+                        );
+                },
+                function (response) {
+                    $scope.serverError = response.data.error_description;
+                    toaster.pop({ type: 'error', body: $scope.serverError });
+                });
         }
+
         $scope.continueAsGuest = function () {
-            $scope.loginFunction = 1;
+            $scope.loginEmail = "guest@guest.com";
+            $scope.loginPassword = "GU3$Tl@g1n";
+            $scope.login();
         }
+
         $scope.register = function () {
+            if ($scope.registerEnabled == false) {
+                $scope.registerEnabled = true;
+                toaster.pop({ type: 'info', body: "Email, password, firstname and last name are required to register" });
+            }
+            else {
+                if ($scope.validate(true) == true) {
+                    loginService.register($scope.loginEmail, $scope.loginPassword, $scope.registerFirstname, $scope.registerLastname)
+                        .then(function (response) {
+                            toaster.pop({ type: 'info', body: "Register succeeded. You can now login with your new credentials" });
+                            $scope.registerEnabled = false;
+                            $scope.registerFirstname = undefined;
+                            $scope.registerLastname = undefined;
+                        },
+                        function (response) {
+                            switch (response.status) {
+                                case 400:
+                                    $scope.serverError = response.data.errorList[0];
+                                    break;
+                                default:
+                                    $scope.serverError = response.data.error_description;
+                            }
+                            toaster.pop({ type: 'error', body: $scope.serverError });
+                        });
+                }
+            }
             $scope.registerEnabled = true;
-            $scope.loginFunction = 2;
+        }
+
+        $scope.validate = function(register) {
+            var emailRegEx = new RegExp("^[a-z0-9!#$%&' * +/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
+            if (!$scope.loginEmail || $scope.loginEmail == '' || !emailRegEx.test($scope.loginEmail)) {
+                toaster.pop({ type: 'error', body: "Email is invalid" });
+                return false;
+            }
+
+            if (!$scope.loginPassword || $scope.loginPassword == '') {
+                toaster.pop({ type: 'error', body: "Password is required" });
+                return false;
+            }
+
+            if (register == true)
+            {
+                if (!$scope.registerFirstname || $scope.registerFirstname == '') {
+                    toaster.pop({ type: 'error', body: "First name is required" });
+                    return false;
+                }
+
+                if (!$scope.registerLastname || $scope.registerLastname == '') {
+                    toaster.pop({ type: 'error', body: "Last name is required" });
+                    return false;
+                }
+            }
+            return true;
         }
     }])
     .controller('ImageController', ['$scope', 'hasAccess', '$state', 'imageService', 'initialImage', 'toaster', function ($scope, hasAccess, $state, imageService, initialImage, toaster) {
