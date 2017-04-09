@@ -36,5 +36,12 @@
                 return false;
             }
         }
+
+        public void RemoveImage(string userImageId)
+        {
+            int id = Int32.Parse(userImageId);
+            this._userImageRepository.Delete(id);
+            this._unitOfWork.SaveChanges();
+        }
     }
 }

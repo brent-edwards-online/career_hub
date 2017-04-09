@@ -1,21 +1,33 @@
 ﻿<div class="page_content">
     <div class="container">
-        <ul class="media-list">
-            <li class="media" ng-repeat="image in imageList">
-                <div class="media-left media-middle">
-                    <img class="media-object img-thumbnail" src="{{image.imageUrls.thumb}}" alt="Image">
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">
-                        {{image.isLiked}}
-                    </h4>
-                    <p>Photo By: {{image.imageUser.name}}</p>
-                    <p>Bio: {{image.imageUser.bio}}</p>
-                    <div class="media-left media-middle">
-                        <img class="media-object img-thumbnail" src="{{image.imageUser.profile_image.medium}}" alt="Image">
+        <div class="row">
+            <div class="text-center">
+                <h1>Filter</h1>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-secondary footer-buttons" ng-click="filterImages(1)"><span class="glyphicon glyphicon-thumbs-up"></span>&nbsp;Liked&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-info footer-buttons" ng-click="filterImages(0)">&nbsp;View All&nbsp;&nbsp;</button>
+                <button type="button" class="btn btn-secondary footer-buttons" ng-click="filterImages(2)"><span class="glyphicon glyphicon-thumbs-down"></span>Disliked</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:20px">
+        <div class="row">
+            <div class="text-center">
+                <div ng-repeat="image in filteredImageList" style="display: inline-block">
+                    <div class="card" style="width: 30rem;">
+                        <img class="card-img-top" src="{{image.imageUrls.thumb}}" alt="Photo By: {{image.imageUser.name}}">
+                        <div class="card-block">
+                            <h4 class="card-title">Photo By: {{image.imageUser.name}}</h4>
+                            <h5 ng-if="image.isLiked" class="card-text">You liked this image</h5>
+                            <h5 ng-if="!image.isLiked" class="card-text">You disliked this image</h5>
+                            <button type="button" ng-click="removeImage($index, image.userImageId)" class="btn btn-primary">Remove</button>
+                        </div>
                     </div>
                 </div>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
+
 </div>

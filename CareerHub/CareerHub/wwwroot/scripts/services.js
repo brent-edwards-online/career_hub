@@ -36,7 +36,7 @@ angular.module('careerHub')
             })
         };
 
-        this.register = function (email, password) {
+        this.register = function (email, password, firstname, lastname) {
             alert('Register');
         };
 
@@ -98,4 +98,19 @@ angular.module('careerHub')
                 }
             })
         };
+
+        this.removeImage = function(userImageId) {
+            var tokenData = localStorageService.get('token-data');
+            var userData = localStorageService.get('user-data');
+
+            var imageURL = baseurl + 'api/image?userImageId=' + encodeURIComponent(userImageId);
+            
+            return $http({
+                method: 'DELETE',
+                url: imageURL,
+                headers: {
+                    'Authorization': 'Bearer ' + tokenData.access_token
+                }
+            })
+        }
     }]);

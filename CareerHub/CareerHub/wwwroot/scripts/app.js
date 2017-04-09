@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var app = angular.module('careerHub', ['ui.router', 'ngResource', 'LocalStorageModule', 'ngToast']);
+var app = angular.module('careerHub', ['ui.router', 'ngResource', 'LocalStorageModule', 'toaster']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -25,6 +25,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 resolve: {
                     hasAccess: function (loginService) {
                         return loginService.isLoggedIn();
+                    },
+                    initialImage: function (imageService) {
+                        return imageService.getRandomImage();
                     }
                 },
                 views: {
@@ -38,7 +41,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 url: 'review/',
                 resolve: {
                     hasAccess: function (loginService) {
-                        return loginService.isLoggedIn();
+                        return loginService.isLoggedIn();   
+                    },
+                    imageList: function () {
+
                     }
                 },
                 views: {

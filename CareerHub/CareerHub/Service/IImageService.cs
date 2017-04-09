@@ -7,5 +7,6 @@
     {
         IEnumerable<UserImage> GetImagesByUser(string userid);
         bool InsertImage(string userid, string urls, string imageuser, bool isLiked);
+        void RemoveImage(string userImageId);
     }
 }

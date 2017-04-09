@@ -1,15 +1,19 @@
 ﻿'use strict';
 
 angular.module('careerHub')
-    .controller('IndexController', ['$scope', 'loginService', 'localStorageService', '$state', function ($scope, loginService, localStorageService, $state) {
+    .controller('IndexController', ['$scope', 'loginService', 'localStorageService', '$state', 'toaster', function ($scope, loginService, localStorageService, $state, toaster) {
         $scope.loginFunction = -1;
         $scope.serverError = undefined;
+        $scope.currentUser = "";
+        $scope.registerEnabled = false;
 
         $scope.actionLogin = function () {
             $scope.serverError = undefined;
 
             if ($scope.loginFunction == 2) {
-                loginService.register($scope.loginEmail, $scope.loginPassword);
+                if ($scope.registerEnabled) {
+                    loginService.register($scope.loginEmail, $scope.loginPassword);
+                }
             }
             else {
                 if ($scope.loginFunction == 1) {
@@ -33,18 +37,22 @@ angular.module('careerHub')
                                     default:
                                         $scope.serverError = response.data.error_description;
                                 }
+                                toaster.pop({ type: 'error', body: $scope.serverError });
                             }
-                        );                        
+                            );
                     },
-                    function (response) {
+                    function (response) {                        
                         $scope.serverError = response.data.error_description;
-                });
+                        toaster.pop({ type: 'error', body: $scope.serverError });
+                    });
             }
         };
 
         $scope.isLoggedIn = function () {
-            var userData = localStorageService.get('token-data');
-            if (userData && userData.access_token) {
+            var tokenData = localStorageService.get('token-data');
+            if (tokenData && tokenData.access_token) {
+                var userData = localStorageService.get('user-data');
+                $scope.currentUser = userData.firstname; 
                 return true;
             }
             else {
@@ -64,10 +72,11 @@ angular.module('careerHub')
             $scope.loginFunction = 1;
         }
         $scope.register = function () {
+            $scope.registerEnabled = true;
             $scope.loginFunction = 2;
         }
     }])
-    .controller('ImageController', ['$scope', 'hasAccess', '$state', 'imageService', 'ngToast', function ($scope, hasAccess, $state, imageService, ngToast) {
+    .controller('ImageController', ['$scope', 'hasAccess', '$state', 'imageService', 'initialImage', 'toaster', function ($scope, hasAccess, $state, imageService, initialImage, toaster) {
         $scope.hasAccess = hasAccess;
         $scope.imageUrl = "";
         $scope.showImage = false;
@@ -76,8 +85,10 @@ angular.module('careerHub')
             $state.go('app');
         }
         else {
-            $scope.imageUrl = "https://images.unsplash.com/photo-1439433547555-1f4f96513499?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&s=0b9a77e49c916f457b8ff9509237ffa1";
+            $scope.currentImageData = initialImage.data;
+            $scope.imageUrl = initialImage.data.urls.small;
             $scope.showImage = true;
+
         }
 
         $scope.getRandomImage = function () {
@@ -89,38 +100,53 @@ angular.module('careerHub')
                 },
                 function (response) {
                     $scope.serverError = response.data.error_description;
+                    toaster.pop({ type: 'error', body: $scope.serverError });
                 });
         }
 
-        $scope.saveImageRating = function(isLiked) {
+        $scope.saveImageRating = function (isLiked) {
             imageService.saveImage(isLiked, $scope.currentImageData)
                 .then(
                 function (response) {
-                    ngToast.create({
-                        content: '<div class="ngtoast-turn">Image was saved</div>'
-                    });
+                    toaster.pop({ type: 'info', body: "Image was saved" });
                 },
                 function (response) {
                     $scope.serverError = response.data.error_description;
-                    ngToast.create({
-                        content: '<div class="ngtoast-turn">Image was not saved - {{ $scope.serverError }}</div>'
-                    });
+                    toaster.pop({ type: 'error', body: $scope.serverError });
                 });
         }
     }])
-    .controller('ReviewController', ['$scope', 'hasAccess', '$state', 'imageService', function ($scope, hasAccess, $state, imageService) {
+    .controller('ReviewController', ['$scope', 'hasAccess', '$state', 'imageService', 'filterFilter', 'toaster', function ($scope, hasAccess, $state, imageService, filterFilter, toaster) {
         $scope.hasAccess = hasAccess;
         $scope.imageList = [];
+        $scope.view = 0;
 
         if (!$scope.hasAccess) {
             $state.go('app');
         }
 
+        $scope.removeImage = function (idx, imageId) {
+            imageService.removeImage(imageId)
+                .then(
+                function (response) {
+                    console.log("Image removed");
+                    var i = $scope.imageList.indexOf($scope.imageList.filter(function (item) {
+                        return item.userImageId == imageId
+                    })[0])
+                    $scope.imageList.splice(i, 1);
+                    $scope.filterImages($scope.view);  
+                    toaster.pop({ type: 'info', body: "Image was removed" });
+                },
+                function (response) {
+                    $scope.serverError = response.data.error_description;
+                    toaster.pop({ type: 'error', body: $scope.serverError });
+                });
+        }
+
         imageService.getAllImages()
             .then(
             function (response) {
-                for( var idx in response.data.result)
-                {
+                for (var idx in response.data.result) {
                     var urls = JSON.parse(response.data.result[idx].imageUrls);
                     var user = JSON.parse(response.data.result[idx].imageUser);
                     response.data.result[idx].imageUrls = urls;
@@ -128,15 +154,29 @@ angular.module('careerHub')
                 }
 
                 $scope.imageList = response.data.result;
+                $scope.filteredImageList = response.data.result;
             },
             function (response) {
                 $scope.serverError = response.data.error_description;
-                ngToast.create({
-                    content: '<div class="ngtoast-turn">UNable to retrieve images - {{ $scope.serverError }}</div>'
-                });
+                toaster.pop({ type: 'error', body: "Unable to retrieve images - " + $scope.serverError });
             });
-        
+
+        $scope.filterImages = function (view) {
+            $scope.view = view;
+            switch (view)
+            {
+                case 2:
+                    $scope.filteredImageList = filterFilter($scope.imageList, { isLiked: false });
+                    break;
+                case 1:
+                    $scope.filteredImageList = filterFilter($scope.imageList, { isLiked: true });
+                    break;
+                default:
+                    $scope.filteredImageList = $scope.imageList;
+            }
+            
+        }
     }])
     .controller('AboutController', ['$scope', function ($scope) {
-        
+
     }]);

@@ -23,6 +23,27 @@
             return new JsonResult( new { Result = this._imageService.GetImagesByUser(userId) } );
         }
 
+        [HttpDelete]
+        public IActionResult Remove(string userImageId)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    this._imageService.RemoveImage(userImageId);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { ErrorMessage = ex.Message });
+                }
+            }
+            else
+            {
+                return BadRequest(new { ErrorMessage = "Model state was invalid" });
+            }
+        }
+
         [HttpPost]
         public IActionResult SaveImage(SaveImageViewModel image)
         {
