@@ -12,6 +12,15 @@ WHERE a.LoginDate >= '20150701 00:00:00' AND  a.LoginDate < '20150716 00:00:00'
 GROUP BY j.FirstName + ' ' + j.LastName 
 ORDER BY Count(a.UserId) DESC
 
+--For bonus points consider that all times in the database are stored in UTC +0/GMT time 
+-- and the client is based in Brisbane which is GMT +10 so you should offset the time to account for this.
+SELECT j.FirstName + ' ' + j.LastName as Name, Count(a.UserId) as 'Count of logins'
+FROM JobSeekers j 
+INNER JOIN Users u ON j.UserId = u.Id
+INNER JOIN Users_AccessLog a ON u.Id = a.UserId
+WHERE DATEADD(s,DATEDIFF(s,GETUTCDATE(), GETDATE()),a.LoginDate) >= '20150701 00:00:00' AND  DATEADD(s,DATEDIFF(s,GETUTCDATE(), GETDATE()),a.LoginDate) < '20150716 00:00:00'
+GROUP BY j.FirstName + ' ' + j.LastName 
+ORDER BY Count(a.UserId) DESC
 
 -- SQL 2:
 -- CareerHub has a labelling function that enables users to be grouped together. The database

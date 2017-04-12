@@ -160,7 +160,16 @@ angular.module('careerHub')
                     toaster.pop({ type: 'info', body: "Image was saved" });
                 },
                 function (response) {
-                    $scope.serverError = response.data.error_description;
+                    switch (response.status) {
+                        case 400:
+                            $scope.serverError = response.statusText + " 404:" + response.data.errorMessage;
+                            break;
+                        case 404:
+                            $scope.serverError = "Server Error 404:" + response.statusText;
+                            break;
+                        default:
+                            $scope.serverError = response.data.error_description;
+                    }
                     toaster.pop({ type: 'error', body: $scope.serverError });
                 });
         }
