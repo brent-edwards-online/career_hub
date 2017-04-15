@@ -45,7 +45,7 @@
         }
 
         [HttpPost]
-        public IActionResult SaveImage(SaveImageViewModel image)
+        public IActionResult SaveImage(SaveImageModel image)
         {
             if(ModelState.IsValid)
             {

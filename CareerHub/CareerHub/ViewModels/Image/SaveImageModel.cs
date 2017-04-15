@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class SaveImageViewModel
+    public class SaveImageModel
     {
         [Required]
         public bool IsLiked { get; set; }

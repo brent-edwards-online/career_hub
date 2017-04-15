@@ -41,11 +41,15 @@
 
             // Identity Server DbContext
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AWSConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("CareerHub")));
 
             // Entity Framework DbContext
             services.AddDbContext<CareerHubDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AWSConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("CareerHub")));
+
+            // Entity Framework DbContext
+            services.AddDbContext<GymManagerDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("GymManager")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
@@ -55,6 +59,8 @@
 
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IUserImageRepository, UserImageRepository>();
+            services.AddTransient<IMemberService, MemberService>();
+            services.AddTransient<IMemberRepository, MemberRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddIdentityServer()

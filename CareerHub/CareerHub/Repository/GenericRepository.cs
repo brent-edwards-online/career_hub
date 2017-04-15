@@ -9,7 +9,7 @@ namespace CareerHub.Repository
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
 
-        protected readonly CareerHubDbContext _context;
+        protected readonly DbContext _context;
         /// <summary>
         /// The data set.
         /// </summary>
@@ -19,7 +19,7 @@ namespace CareerHub.Repository
         /// Initializes a new instance of the <see cref="GenericRepository{T}"/> class.
         /// </summary>
         /// <param name="factory">The database factory.</param>
-        public GenericRepository(CareerHubDbContext context)
+        public GenericRepository(DbContext context)
         {
             this._context = context;
             this._dataset = this._context.Set<T>();
