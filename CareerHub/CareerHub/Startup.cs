@@ -88,7 +88,7 @@
 
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
-                Authority = "http://careerhub.brentedwardsonline.com:80/",
+                Authority = "http://ratemyimage.brentedwardsonline.com:80/",
                 AllowedScopes = { "api" },
                 RequireHttpsMetadata = false
             });

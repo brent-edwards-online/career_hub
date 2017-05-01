@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 angular.module('careerHub')
-    .constant('baseurl', 'https://careerhub.brentedwardsonline.com/')
+    .constant('baseurl', 'https://ratemyimage.brentedwardsonline.com/')
     .constant('baseimageurl', 'https://api.unsplash.com/')
     .service('loginService', ['$http', '$resource', 'baseurl', 'localStorageService', function ($http, $resource, baseurl, localStorageService) {
         this.login = function (email, password) {

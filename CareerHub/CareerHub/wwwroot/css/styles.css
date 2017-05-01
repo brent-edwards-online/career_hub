@@ -14,7 +14,7 @@ div.well {
     background: #000;
 }
 
-.well, .panel-body, .panel-footer, nav.navbar-default, .navbar-default .navbar-nav > li > a, .panel-default > .panel-heading {
+.navbar-default .navbar-brand, .well, .panel-body, .panel-footer, nav.navbar-default, .navbar-default .navbar-nav > li > a, .panel-default > .panel-heading {
     background: #000;
     color: #85C2C2;
 }
@@ -30,7 +30,7 @@ h1 {
 }
 
 #navbar {
-    padding-top: 22px;
+    /*padding-top: 22px;*/
 }
 
 #navbar img {
@@ -44,8 +44,8 @@ ul.nav.navbar-nav {
 */
 
 .navbar-default {
-    min-height: 100px;
-    max-height: 100px;
+    /*min-height: 100px;*/
+    /*max-height: 100px;*/
 }
 
 .page_content {
@@ -89,4 +89,8 @@ ul.nav {
 
 .card {
     margin: 5px;
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    background-color: #85C2C2;
 }
